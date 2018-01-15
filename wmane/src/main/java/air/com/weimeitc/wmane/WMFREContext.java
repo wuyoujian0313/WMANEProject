@@ -2,17 +2,19 @@ package air.com.weimeitc.wmane;
 
 import com.adobe.fre.FREContext;
 import com.adobe.fre.FREFunction;
-import com.wmtc.wmane.ANEFunction.IsinstallFunction;
-import com.wmtc.wmane.ANEFunction.QQAuthFunction;
-import com.wmtc.wmane.ANEFunction.RegisterSDKFunction;
-import com.wmtc.wmane.ANEFunction.SendImageFunction;
-import com.wmtc.wmane.ANEFunction.SendImageURLFunction;
-import com.wmtc.wmane.ANEFunction.SendLinkFunction;
-import com.wmtc.wmane.ANEFunction.SendTextFunction;
-import com.wmtc.wmane.ANEFunction.WXAuthFunction;
+
 
 import java.util.HashMap;
 import java.util.Map;
+
+import air.com.weimeitc.wmane.ANEFunction.IsinstallFunction;
+import air.com.weimeitc.wmane.ANEFunction.QQAuthFunction;
+import air.com.weimeitc.wmane.ANEFunction.RegisterSDKFunction;
+import air.com.weimeitc.wmane.ANEFunction.SendImageFunction;
+import air.com.weimeitc.wmane.ANEFunction.SendImageURLFunction;
+import air.com.weimeitc.wmane.ANEFunction.SendLinkFunction;
+import air.com.weimeitc.wmane.ANEFunction.SendTextFunction;
+import air.com.weimeitc.wmane.ANEFunction.WXAuthFunction;
 
 /**
  * Created by wuyoujian on 17/3/15.

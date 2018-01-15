@@ -8,12 +8,14 @@ import com.tencent.connect.common.Constants;
 import com.tencent.tauth.IUiListener;
 import com.tencent.tauth.Tencent;
 import com.tencent.tauth.UiError;
-import com.wmtc.wmane.SharedSDK.SharedManager;
-import com.wmtc.wmane.SharedSDK.ThreadManager;
+
 
 import org.json.JSONObject;
 
 import java.io.File;
+
+import air.com.weimeitc.wmane.SharedSDK.SharedManager;
+import air.com.weimeitc.wmane.SharedSDK.ThreadManager;
 
 /**
  * Created by wuyoujian on 2017/5/4.
@@ -30,7 +32,7 @@ public class QQEntryActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        tencentAPI = Tencent.createInstance(SharedManager.QQ_APP_ID,QQEntryActivity.this);
+        tencentAPI = Tencent.createInstance(SharedManager.getSingleton().getAppId(SharedManager.E_AIPlatfrom.AIPlatfromQQ),QQEntryActivity.this);
         Intent intent = getIntent();
         String type = intent.getStringExtra("type");
         if (type.equalsIgnoreCase("sharing")) {

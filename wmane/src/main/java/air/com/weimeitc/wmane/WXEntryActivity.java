@@ -11,8 +11,9 @@ import com.tencent.mm.opensdk.modelbase.BaseReq;
 import com.tencent.mm.opensdk.modelbase.BaseResp;
 import com.tencent.mm.opensdk.modelmsg.SendAuth;
 import com.tencent.mm.opensdk.openapi.IWXAPIEventHandler;
-import com.wmtc.wmane.SharedSDK.SharedManager;
 
+
+import air.com.weimeitc.wmane.SharedSDK.SharedManager;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
@@ -70,8 +71,8 @@ public class WXEntryActivity extends Activity implements IWXAPIEventHandler {
                             try {
 
                                 if (code != null) {
-                                    String appId = SharedManager.WX_APP_ID;
-                                    String appSecret = SharedManager.WX_APP_SECRET;
+                                    String appId = SharedManager.getSingleton().getAppId(SharedManager.E_AIPlatfrom.AIPlatfromWechat);
+                                    String appSecret = SharedManager.getSingleton().getAppSecret(SharedManager.E_AIPlatfrom.AIPlatfromWechat);
 
                                     final String url = String.format("https://api.weixin.qq.com/sns/oauth2/access_token?appid=%s&secret=%s&code=%s&grant_type=authorization_code",
                                             appId, appSecret, code);

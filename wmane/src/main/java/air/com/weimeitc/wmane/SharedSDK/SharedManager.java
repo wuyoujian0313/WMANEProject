@@ -27,50 +27,17 @@ import java.util.List;
 import air.com.weimeitc.wmane.QQEntryActivity;
 
 
-//air.com.weimeitc.bqwx:039fcbae92e6388b7a9babf728ddf696
-//air.com.weimeitc.bqdj:233936a9c7c6ff761eb23e34f0e55ceb
-//import air.com.weimeitc.bqwx.QQEntryActivity;
-//import air.com.weimeitc.bqwh.QQEntryActivity;
-
-
 public class SharedManager implements ActionSheet.IActionSheetListener {
 
     private ActionSheet mActionSheet;
-    public static Activity activity;
     private List<AISharedPlatformSDKInfo> mSDKInfos;
     private List<AISharedPlatformScene> mScenes;
     private List<String> mMenus;
-    //private BaseUiListener loginQQListener;
-
     private SharedFinishCallback mCallback;
     private SharedDataModel mData;
 
-    // 微信 - 北汽高级维修
-//    public static final  String WX_APP_ID = "wx828ddb181a65570c";
-//    public static final  String WX_APP_SECRET = "d2f36fee5809ea6d1909ff56e29f1e83";
-//    public static final  String QQ_APP_ID = "1106131684";
-//    public static final  String QQ_APP_SECRET = "7kuxHSwsLybdLQ5O";
-
-    // 微信 - 北汽汽车维护
-//    public static final  String WX_APP_ID = "wx78bf5210b6ebf466";
-//    public static final  String WX_APP_SECRET = "d2f36fee5809ea6d1909ff56e29f1e83";
-//
-//    //APP ID 1106347438 APP KEY NT66deIQ4RNl5gDA
-//    public static final  String QQ_APP_ID = "1106347438";
-//    public static final  String QQ_APP_SECRET = "NT66deIQ4RNl5gDA";
-
-
-    // 北汽电机知识
-    public static final  String WX_APP_ID = "wxf74876d011fb1356";
-    public static final  String WX_APP_SECRET = "fedba484c5f88fc3398eee6bda007dce";
-    public static final  String QQ_APP_ID = "1106060269";
-    public static final  String QQ_APP_SECRET = "OR7B2A2kRZC6riPH";
-
-    public static final  String WX_APP_REDIRECTURI = "";
     public static IWXAPI wxapi;
-    public static final  String QQ_APP_REDIRECTURI = "";
-
-
+    public static Activity activity;
 
     // 分享回调函数
     public interface SharedFinishCallback {
@@ -81,7 +48,6 @@ public class SharedManager implements ActionSheet.IActionSheetListener {
     public static final SharedManager getSingleton() {
         return LazyHolder.INSTANCE;
     }
-
     private static class LazyHolder {
         private static final SharedManager INSTANCE = new SharedManager();
     }
@@ -91,8 +57,7 @@ public class SharedManager implements ActionSheet.IActionSheetListener {
         return wxapi.isWXAppInstalled();
     }
 
-    // 注册
-    public void regiterSharedSDK(Activity activity) {
+    public void regiterSharedPlatforms(Activity activity, List<AISharedPlatformSDKInfo> platforms) {
 
         SharedManager.activity = activity;
         this.mActionSheet = new ActionSheet(this.activity);
@@ -105,12 +70,10 @@ public class SharedManager implements ActionSheet.IActionSheetListener {
         this.mScenes = new ArrayList<>();
         this.mMenus = new ArrayList<>();
 
-        AISharedPlatformSDKInfo sdk1 = new AISharedPlatformSDKInfo(E_AIPlatfrom.AIPlatfromWechat,
-                WX_APP_ID,WX_APP_SECRET,WX_APP_REDIRECTURI);
-        AISharedPlatformSDKInfo sdk2 = new AISharedPlatformSDKInfo(E_AIPlatfrom.AIPlatfromQQ,
-                QQ_APP_ID,QQ_APP_SECRET,QQ_APP_REDIRECTURI);
-        this.mSDKInfos.add(sdk1);
-        this.mSDKInfos.add(sdk2);
+        for (AISharedPlatformSDKInfo sdk:platforms) {
+            this.mSDKInfos.add(sdk);
+        }
+
         this.registerSharedPlatform();
     }
 
@@ -120,8 +83,8 @@ public class SharedManager implements ActionSheet.IActionSheetListener {
 
             E_AIPlatfrom platform = item.platfrom;
             if (platform == E_AIPlatfrom.AIPlatfromWechat) {
-                this.wxapi = WXAPIFactory.createWXAPI(this.activity,WX_APP_ID,true);
-                this.wxapi.registerApp(WX_APP_ID);
+                this.wxapi = WXAPIFactory.createWXAPI(this.activity,item.getAppId(),true);
+                this.wxapi.registerApp(item.getAppId());
 
                 this.mScenes.add(new AISharedPlatformScene(platform, E_AIPlatformScene.AIPlatformSceneSession,"分享到微信好友"));
                 this.mScenes.add(new AISharedPlatformScene(platform, E_AIPlatformScene.AIPlatformSceneTimeline,"分享到微信朋友圈"));
@@ -130,8 +93,6 @@ public class SharedManager implements ActionSheet.IActionSheetListener {
 
                 this.mScenes.add(new AISharedPlatformScene(platform, E_AIPlatformScene.AIPlatformSceneSession,"分享到QQ好友"));
                 this.mScenes.add(new AISharedPlatformScene(platform, E_AIPlatformScene.AIPlatformSceneTimeline,"分享到QQ空间"));
-            } else if (platform == E_AIPlatfrom.AIPlatfromWeibo) {
-
             }
         }
 
@@ -144,6 +105,26 @@ public class SharedManager implements ActionSheet.IActionSheetListener {
         }
 
         this.mActionSheet.setOtherButtonTitlesSimple(this.mMenus);
+    }
+
+    public String getAppId(E_AIPlatfrom platform) {
+        for (AISharedPlatformSDKInfo sdk:this.mSDKInfos) {
+            if (sdk.platfrom == platform) {
+                return sdk.getAppId();
+            }
+        }
+
+        return null;
+    }
+
+    public String getAppSecret(E_AIPlatfrom platform) {
+        for (AISharedPlatformSDKInfo sdk:this.mSDKInfos) {
+            if (sdk.platfrom == platform) {
+                return sdk.getAppSecret();
+            }
+        }
+
+        return null;
     }
 
     public void loginByWX() {
@@ -175,8 +156,6 @@ public class SharedManager implements ActionSheet.IActionSheetListener {
             sharedToWeixin(scene);
         } else if (scene.platfrom == E_AIPlatfrom.AIPlatfromQQ) {
             sharedToQQ(scene);
-        } else if (scene.platfrom == E_AIPlatfrom.AIPlatfromWeibo ) {
-            sharedToWeibo(scene);
         }
     }
 
@@ -229,7 +208,7 @@ public class SharedManager implements ActionSheet.IActionSheetListener {
                 msg.mediaObject = imageObject;
 
             } catch (Exception e) {
-                e.printStackTrace();;
+                e.printStackTrace();
                 return;
             }
 
@@ -246,8 +225,6 @@ public class SharedManager implements ActionSheet.IActionSheetListener {
 
             req.transaction = APIHelper.buildTransaction("webpage");
             req.message = msg;
-
-
         }
 
         wxapi.sendReq(req);
@@ -299,26 +276,12 @@ public class SharedManager implements ActionSheet.IActionSheetListener {
         activity.startActivity(intent);
     }
 
-
-
-
-    private void sharedToWeibo(AISharedPlatformScene scene) {
-
-    }
-
-    private static enum E_AIPlatfrom {
+    public static enum E_AIPlatfrom {
         AIPlatfromWechat,
-        AIPlatfromQQ,
-        AIPlatfromWeibo
+        AIPlatfromQQ
     }
 
-    private static enum  E_AIPlatformScene {
-        AIPlatformSceneSession,
-        AIPlatformSceneTimeline,
-        AIPlatformSceneFavorite
-    }
-
-    private class AISharedPlatformSDKInfo {
+    public class AISharedPlatformSDKInfo extends Object {
 
         public E_AIPlatfrom platfrom;
         public String appId;
@@ -332,9 +295,47 @@ public class SharedManager implements ActionSheet.IActionSheetListener {
             this.appSecret = appSecret;
             this.redirectURI = redirectURI;
         }
+
+        public E_AIPlatfrom getPlatfrom() {
+            return platfrom;
+        }
+
+        public String getAppId() {
+            return appId;
+        }
+
+        public String getAppSecret() {
+            return appSecret;
+        }
+
+        public String getRedirectURI() {
+            return redirectURI;
+        }
+
+        public void setPlatfrom(E_AIPlatfrom platfrom) {
+            this.platfrom = platfrom;
+        }
+
+        public void setAppId(String appId) {
+            this.appId = appId;
+        }
+
+        public void setAppSecret(String appSecret) {
+            this.appSecret = appSecret;
+        }
+
+        public void setRedirectURI(String redirectURI) {
+            this.redirectURI = redirectURI;
+        }
     }
 
-    private class AISharedPlatformScene {
+    private static enum  E_AIPlatformScene {
+        AIPlatformSceneSession,
+        AIPlatformSceneTimeline,
+        AIPlatformSceneFavorite
+    }
+
+    private class AISharedPlatformScene extends Object {
         public  E_AIPlatfrom platfrom;
         public  E_AIPlatformScene scene;
         public  String sceneName;
