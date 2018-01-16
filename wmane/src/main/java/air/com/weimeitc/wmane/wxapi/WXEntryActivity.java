@@ -1,4 +1,4 @@
-package air.com.weimeitc.wmane;
+package air.com.weimeitc.wmane.wxapi;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -14,6 +14,7 @@ import com.tencent.mm.opensdk.openapi.IWXAPIEventHandler;
 
 
 import air.com.weimeitc.wmane.SharedSDK.SharedManager;
+import air.com.weimeitc.wmane.WMANEShare;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
@@ -51,7 +52,7 @@ public class WXEntryActivity extends Activity implements IWXAPIEventHandler {
             String unionId = data.getString("unionId");
             // UI界面的更新等相关操作
 
-            WMANEShare.getSingleton().getFreContext().dispatchStatusEventAsync("login_function_qq",nickname +"###"+unionId);
+            WMANEShare.getSingleton().getFreContext().dispatchStatusEventAsync("login_function_",nickname +"###"+unionId);
         }
     };
 

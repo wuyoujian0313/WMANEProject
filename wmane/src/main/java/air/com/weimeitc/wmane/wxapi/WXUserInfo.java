@@ -1,4 +1,4 @@
-package air.com.weimeitc.wmane;
+package air.com.weimeitc.wmane.wxapi;
 
 /**
  * Created by wuyoujian on 17/4/6.

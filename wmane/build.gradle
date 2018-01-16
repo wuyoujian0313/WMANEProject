@@ -19,6 +19,11 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
+
+    lintOptions {
+        abortOnError false
+    }
+
 }
 
 dependencies {
@@ -28,13 +33,13 @@ dependencies {
     })
     compile 'com.android.support:appcompat-v7:25.3.1'
     testCompile 'junit:junit:4.12'
+    compile 'com.tencent.mm.opensdk:wechat-sdk-android-without-mta:+'
 }
 
 //Copy类型
 task makeJar(type: Copy) {
     //删除存在的
-    delete 'build/libs/com.wmtc.wmane.jar'
-    delete 'com.wmtc.wmane.jar'
+    delete 'build/libs/*.jar'
     //设置拷贝的文件
     from('build/intermediates/bundles/release/')
     //打进jar包后的文件目录
@@ -44,7 +49,7 @@ task makeJar(type: Copy) {
     //（我们只关心classes.jar这个文件）
     include('classes.jar')
     //重命名
-    rename ('classes.jar', 'com.wmtc.wmane.jar')
+    rename ('classes.jar', 'wmane.jar')
 }
 
 
