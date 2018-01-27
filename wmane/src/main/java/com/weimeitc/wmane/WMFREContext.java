@@ -5,6 +5,8 @@ import com.adobe.fre.FREFunction;
 import java.util.HashMap;
 import java.util.Map;
 
+import com.weimeitc.wmane.ANEFunction.AESDecryptFunction;
+import com.weimeitc.wmane.ANEFunction.AESEncryptFunction;
 import com.weimeitc.wmane.ANEFunction.AliPayFunction;
 import com.weimeitc.wmane.ANEFunction.AliSDKRegiterFunction;
 import com.weimeitc.wmane.ANEFunction.IsinstallFunction;
@@ -40,6 +42,9 @@ public class WMFREContext extends FREContext {
     private static final String PAY_FUNCTION_ALIPAY  = "alipay";
 
 
+    private static final String ENCRYPT_FUNCTION  = "encrypt_wm";
+    private static final String DECRYPT_FUNCTION  = "decrypt_wm";
+
     @Override
     public void dispose() {
 
@@ -63,6 +68,9 @@ public class WMFREContext extends FREContext {
 
         map.put(PAY_FUNCTION_REGISTER_ALIPAYSDK,new AliSDKRegiterFunction());
         map.put(PAY_FUNCTION_ALIPAY,new AliPayFunction());
+
+        map.put(ENCRYPT_FUNCTION,new AESEncryptFunction());
+        map.put(DECRYPT_FUNCTION,new AESDecryptFunction());
         return map;
     }
 
