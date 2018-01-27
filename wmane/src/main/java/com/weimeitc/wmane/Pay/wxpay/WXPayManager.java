@@ -1,4 +1,4 @@
-package com.weimeitc.wmane.Pay;
+package com.weimeitc.wmane.Pay.wxpay;
 
 /**
  * Created by wuyoujian on 2018/1/27.

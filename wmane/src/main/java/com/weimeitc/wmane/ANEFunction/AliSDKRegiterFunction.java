@@ -4,7 +4,7 @@ import com.adobe.fre.FREContext;
 import com.adobe.fre.FREFunction;
 import com.adobe.fre.FREObject;
 import com.weimeitc.wmane.ANETypeConversion;
-import com.weimeitc.wmane.Pay.AliPayManager;
+import com.weimeitc.wmane.Pay.alipay.AliPayManager;
 
 /**
  * Created by wuyoujian on 2018/1/27.

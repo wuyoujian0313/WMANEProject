@@ -282,10 +282,10 @@ public class SharedManager implements ActionSheet.IActionSheetListener {
 
     public class AISharedPlatformSDKInfo extends Object {
 
-        public E_AIPlatfrom platfrom;
-        public String appId;
-        public String appSecret;
-        public String redirectURI;
+        private E_AIPlatfrom platfrom;
+        private String appId;
+        private String appSecret;
+        private String redirectURI;
 
 
         AISharedPlatformSDKInfo (E_AIPlatfrom platfrom,String appId,String appSecret,String redirectURI) {
