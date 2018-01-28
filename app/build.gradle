@@ -4,27 +4,80 @@ android {
     compileSdkVersion 25
     buildToolsVersion "25.0.2"
     defaultConfig {
-        applicationId "air.com.weimeitc.wmaneproject"
+        applicationId "air.com.weimeitc.bqdj"
         minSdkVersion 19
         targetSdkVersion 25
         versionCode 1
         versionName "1.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
+
+    signingConfigs {
+        config_bqdj {
+            keyAlias 'bqdj-cer'
+            keyPassword '123456'
+            storeFile file('bqdj-cer.jks')
+            storePassword '123456'
+
+            v1SigningEnabled true
+            v2SigningEnabled true
+        }
+
+        config_bqwx {
+            keyAlias 'bqwx-cer'
+            keyPassword '123456'
+            storeFile file('bqwx-cer.jks')
+            storePassword '123456'
+
+            v1SigningEnabled true
+            v2SigningEnabled true
+        }
+
+        config_bqwh {
+            keyAlias 'bqwh-cer'
+            keyPassword '123456'
+            storeFile file('bqwh-cer.jks')
+            storePassword '123456'
+
+            v1SigningEnabled true
+            v2SigningEnabled true
+        }
+    }
+
+    productFlavors {
+        bqdj {
+            //sign:53dcc0bbf5aac1c5d96edbf8721fc697
+            applicationId 'air.com.weimeitc.bqdj'
+            signingConfig signingConfigs.config_bqdj
+            resValue "string", "app_name", "bqdj"
+        }
+        bqwh {
+            //sign:b44ba5027b23d4bf84a488dba22ecddb
+            applicationId 'air.com.weimeitc.bqwh'
+            signingConfig signingConfigs.config_bqwh
+            resValue "string", "app_name", "bqwh"
+        }
+        bqwx {
+            //sign:5f53cc0d207d11b52d59540afdc93f75
+            applicationId 'air.com.weimeitc.bqwx'
+            signingConfig signingConfigs.config_bqwx
+            resValue "string", "app_name", "bqwx"
+        }
+    }
+
     buildTypes {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            debuggable false
         }
     }
 }
 
 dependencies {
-    compile fileTree(dir: 'libs', include: ['*.jar'])
-    androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
-        exclude group: 'com.android.support', module: 'support-annotations'
-    })
+    compile fileTree(include: ['*.jar'], dir: 'libs')
     compile 'com.android.support:appcompat-v7:25.3.1'
     compile 'com.android.support.constraint:constraint-layout:1.0.0-alpha7'
-    testCompile 'junit:junit:4.12'
 }
+
+// gradlew assembleRelease
