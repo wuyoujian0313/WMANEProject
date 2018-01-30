@@ -2,6 +2,7 @@ package com.weimeitc.wmane.Pay.alipay;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.content.Context;
 import android.os.Handler;
 import android.os.Message;
 import android.text.TextUtils;
@@ -13,6 +14,8 @@ import com.google.gson.Gson;
 import com.weimeitc.wmane.Pay.alipay.utils.OrderInfoUtil2_0;
 import com.weimeitc.wmane.Pay.alipay.utils.PayResult;
 
+import java.text.SimpleDateFormat;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
@@ -34,10 +37,11 @@ public class AliPayManager {
     private PayFinishCallback payCallback;
     private String aliPayAppId;
     private String aliPayAppSecret;
+    private String payJson;
 
     private static final int SDK_PAY_FLAG = 1;
 
-    public static Activity context;
+    private Activity context;
     private String rsaKey;
 
     // 单例函数
@@ -53,9 +57,59 @@ public class AliPayManager {
         void finishPayCallback(int statusCode, Object resp);
     }
 
-    public void registetSDK(String appId,String appSecret) {
+    public void registetSDK(String appId,String appSecret, Activity context) {
         aliPayAppId = appId;
         aliPayAppSecret = appSecret;
+        this.context = context;
+    }
+
+
+    public class PayJsonInfo {
+        private String goodsDesc;
+        private String goodsName;
+        private String orderNo;
+        private String price;
+        private String scheme;
+
+        public String getGoodsDesc() {
+            return goodsDesc;
+        }
+
+        public String getGoodsName() {
+            return goodsName;
+        }
+
+        public String getOrderNo() {
+            return orderNo;
+        }
+
+        public String getPrice() {
+            return price;
+        }
+
+        public String getScheme() {
+            return scheme;
+        }
+
+        public void setGoodsDesc(String goodsDesc) {
+            this.goodsDesc = goodsDesc;
+        }
+
+        public void setGoodsName(String goodsName) {
+            this.goodsName = goodsName;
+        }
+
+        public void setOrderNo(String orderNo) {
+            this.orderNo = orderNo;
+        }
+
+        public void setPrice(String price) {
+            this.price = price;
+        }
+
+        public void setScheme(String scheme) {
+            this.scheme = scheme;
+        }
     }
 
     @SuppressLint("HandlerLeak")
@@ -95,10 +149,6 @@ public class AliPayManager {
         };
     };
 
-    /**
-     * 统一为请求添加头信息
-     * @return
-     */
     private Request.Builder addHeaders() {
         Request.Builder builder = new Request.Builder()
                 .addHeader("Connection", "keep-alive");
@@ -106,7 +156,7 @@ public class AliPayManager {
     }
 
     public void pay(String payJson, PayFinishCallback finishCallback) {
-
+        this.payJson = payJson;
         this.payCallback = finishCallback;
         new Thread(new Runnable() {
             @Override
@@ -150,10 +200,31 @@ public class AliPayManager {
 
     private void toPay() {
 
-        boolean rsa2 = (rsaKey.length() > 0);
-        Map<String, String> params = OrderInfoUtil2_0.buildOrderParamMap(aliPayAppId, rsa2);
+        Gson gson = new Gson();
+        PayJsonInfo payInfo = gson.fromJson(payJson,PayJsonInfo.class);
+
+        String biz_content = "{";
+        biz_content += "\"timeout_express\":\"30m\",";
+        biz_content += "\"total_amount\":\"" + payInfo.getPrice() + "\"";
+        biz_content += "\"body\":\"" + payInfo.getGoodsDesc() + "\"";
+        biz_content += "\"subject\":\"" + payInfo.getGoodsName() + "\"";
+        biz_content += "\"out_trade_no\":\"" + payInfo.getOrderNo() + "\"";
+        biz_content += "}";
+
+        Map<String, String> params = new HashMap<String, String>();
+        params.put("app_id", aliPayAppId);
+        params.put("biz_content", biz_content);
+        params.put("charset", "utf-8");
+        params.put("method", "alipay.trade.app.pay");
+        params.put("sign_type", "RSA2");
+        params.put("version", "1.0");
+
+        SimpleDateFormat sDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        String timestamp = sDateFormat.format(new java.util.Date());
+        params.put("timestamp", timestamp);
         String orderParam = OrderInfoUtil2_0.buildOrderParam(params);
 
+        boolean rsa2 = (rsaKey.length() > 0);
         String sign = OrderInfoUtil2_0.getSign(params, rsaKey, rsa2);
         final String orderInfo = orderParam + "&" + sign;
 
@@ -175,6 +246,8 @@ public class AliPayManager {
         Thread payThread = new Thread(payRunnable);
         payThread.start();
     }
+
+
 
     public class RSAResult {
         private String RSAKey;

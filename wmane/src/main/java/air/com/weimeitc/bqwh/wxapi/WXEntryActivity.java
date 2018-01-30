@@ -7,6 +7,7 @@ import android.os.Handler;
 import android.os.Message;
 
 import com.google.gson.Gson;
+import com.tencent.mm.opensdk.constants.ConstantsAPI;
 import com.tencent.mm.opensdk.modelbase.BaseReq;
 import com.tencent.mm.opensdk.modelbase.BaseResp;
 import com.tencent.mm.opensdk.modelmsg.SendAuth;
@@ -15,6 +16,7 @@ import com.tencent.mm.opensdk.openapi.IWXAPIEventHandler;
 
 import com.weimeitc.wmane.SharedSDK.SharedManager;
 import com.weimeitc.wmane.WMANEShare;
+
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
@@ -62,7 +64,7 @@ public class WXEntryActivity extends Activity implements IWXAPIEventHandler {
     public void onResp(BaseResp resp) {
         switch (resp.errCode) {
             case BaseResp.ErrCode.ERR_OK:
-                if (resp.getType()== 1) {
+                if (resp.getType()== ConstantsAPI.COMMAND_SENDAUTH) {
                     final String code = ((SendAuth.Resp) resp).code;
 
                     new Thread(new Runnable() {
@@ -87,7 +89,7 @@ public class WXEntryActivity extends Activity implements IWXAPIEventHandler {
                                     String responseData = response.body().string();
 
                                     Gson gson = new Gson();
-                                    WXAccessTokenInfo accessTokenInfo = gson.fromJson(responseData, WXAccessTokenInfo.class);
+                                    air.com.weimeitc.bqwx.wxapi.WXAccessTokenInfo accessTokenInfo = gson.fromJson(responseData, air.com.weimeitc.bqwx.wxapi.WXAccessTokenInfo.class);
 
                                     final String infoUrl = String.format("https://api.weixin.qq.com/sns/userinfo?access_token=%s&openid=%s",
                                             accessTokenInfo.getAccess_token(), accessTokenInfo.getOpenid());
@@ -112,12 +114,23 @@ public class WXEntryActivity extends Activity implements IWXAPIEventHandler {
                             }
                         }
                     }).start();
+                } else if (resp.getType() == ConstantsAPI.COMMAND_PAY_BY_WX) {
+                    // 支付完成
+                    WMANEShare.getSingleton().getFreContext().dispatchStatusEventAsync("wxpay","0");
                 }
 
                 break;
             case BaseResp.ErrCode.ERR_USER_CANCEL:
+                if (resp.getType() == ConstantsAPI.COMMAND_PAY_BY_WX) {
+                    // 支付完成
+                    WMANEShare.getSingleton().getFreContext().dispatchStatusEventAsync("wxpay","1");
+                }
                 break;
             case BaseResp.ErrCode.ERR_AUTH_DENIED:
+                if (resp.getType() == ConstantsAPI.COMMAND_PAY_BY_WX) {
+                    // 支付完成
+                    WMANEShare.getSingleton().getFreContext().dispatchStatusEventAsync("wxpay","1");
+                }
                 break;
             default:
                 break;
@@ -127,3 +140,4 @@ public class WXEntryActivity extends Activity implements IWXAPIEventHandler {
         this.finish();
     }
 }
+

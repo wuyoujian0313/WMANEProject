@@ -16,7 +16,8 @@ public class WXSDKRegiterFunction implements FREFunction {
     public FREObject call(FREContext freContext, FREObject[] freObjects) {
         String appId = ANETypeConversion.FREObject2String(freObjects[0]);
         String appSecret = ANETypeConversion.FREObject2String(freObjects[1]);
-        WXPayManager.getSingleton().registetSDK(appId,appSecret);
+        String partner = ANETypeConversion.FREObject2String(freObjects[2]);
+        WXPayManager.getSingleton().registetSDK(appId,appSecret,partner);
         return null;
     }
 }

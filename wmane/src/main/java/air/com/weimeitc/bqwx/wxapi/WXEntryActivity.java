@@ -7,6 +7,7 @@ import android.os.Handler;
 import android.os.Message;
 
 import com.google.gson.Gson;
+import com.tencent.mm.opensdk.constants.ConstantsAPI;
 import com.tencent.mm.opensdk.modelbase.BaseReq;
 import com.tencent.mm.opensdk.modelbase.BaseResp;
 import com.tencent.mm.opensdk.modelmsg.SendAuth;
@@ -62,7 +63,7 @@ public class WXEntryActivity extends Activity implements IWXAPIEventHandler {
     public void onResp(BaseResp resp) {
         switch (resp.errCode) {
             case BaseResp.ErrCode.ERR_OK:
-                if (resp.getType()== 1) {
+                if (resp.getType()== ConstantsAPI.COMMAND_SENDAUTH) {
                     final String code = ((SendAuth.Resp) resp).code;
 
                     new Thread(new Runnable() {
@@ -112,12 +113,23 @@ public class WXEntryActivity extends Activity implements IWXAPIEventHandler {
                             }
                         }
                     }).start();
+                } else if (resp.getType() == ConstantsAPI.COMMAND_PAY_BY_WX) {
+                    // 支付完成
+                    WMANEShare.getSingleton().getFreContext().dispatchStatusEventAsync("wxpay","0");
                 }
 
                 break;
             case BaseResp.ErrCode.ERR_USER_CANCEL:
+                if (resp.getType() == ConstantsAPI.COMMAND_PAY_BY_WX) {
+                    // 支付完成
+                    WMANEShare.getSingleton().getFreContext().dispatchStatusEventAsync("wxpay","1");
+                }
                 break;
             case BaseResp.ErrCode.ERR_AUTH_DENIED:
+                if (resp.getType() == ConstantsAPI.COMMAND_PAY_BY_WX) {
+                    // 支付完成
+                    WMANEShare.getSingleton().getFreContext().dispatchStatusEventAsync("wxpay","1");
+                }
                 break;
             default:
                 break;
