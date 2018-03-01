@@ -1,5 +1,7 @@
 package com.weimeitc.wmane.ANEFunction;
 
+import android.app.Activity;
+
 import com.adobe.fre.FREContext;
 import com.adobe.fre.FREFunction;
 import com.adobe.fre.FREObject;
@@ -16,7 +18,9 @@ public class AliSDKRegiterFunction implements FREFunction {
     public FREObject call(FREContext freContext, FREObject[] freObjects) {
         String appId = ANETypeConversion.FREObject2String(freObjects[0]);
         String appSecret = ANETypeConversion.FREObject2String(freObjects[1]);
-        AliPayManager.getSingleton().registetSDK(appId,appSecret);
+
+        Activity activity = freContext.getActivity();
+        AliPayManager.getSingleton().registetSDK(appId,appSecret,activity);
         return null;
     }
 }

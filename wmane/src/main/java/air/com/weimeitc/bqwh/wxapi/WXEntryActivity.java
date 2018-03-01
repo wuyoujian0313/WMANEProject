@@ -16,6 +16,8 @@ import com.tencent.mm.opensdk.openapi.IWXAPIEventHandler;
 
 import com.weimeitc.wmane.SharedSDK.SharedManager;
 import com.weimeitc.wmane.WMANEShare;
+import com.weimeitc.wmane.WXAccessTokenInfo;
+import com.weimeitc.wmane.WXUserInfo;
 
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
@@ -89,7 +91,7 @@ public class WXEntryActivity extends Activity implements IWXAPIEventHandler {
                                     String responseData = response.body().string();
 
                                     Gson gson = new Gson();
-                                    air.com.weimeitc.bqwx.wxapi.WXAccessTokenInfo accessTokenInfo = gson.fromJson(responseData, air.com.weimeitc.bqwx.wxapi.WXAccessTokenInfo.class);
+                                    WXAccessTokenInfo accessTokenInfo = gson.fromJson(responseData, WXAccessTokenInfo.class);
 
                                     final String infoUrl = String.format("https://api.weixin.qq.com/sns/userinfo?access_token=%s&openid=%s",
                                             accessTokenInfo.getAccess_token(), accessTokenInfo.getOpenid());

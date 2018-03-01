@@ -16,6 +16,9 @@ import com.tencent.mm.opensdk.openapi.IWXAPIEventHandler;
 
 import com.weimeitc.wmane.SharedSDK.SharedManager;
 import com.weimeitc.wmane.WMANEShare;
+import com.weimeitc.wmane.WXAccessTokenInfo;
+import com.weimeitc.wmane.WXUserInfo;
+
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;

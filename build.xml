@@ -1,0 +1,11 @@
+<?xml version= "1.0"?>
+<project name= "WMANE" default="main" basedir="wmane" >
+	<target name="main">
+    	<zip destfile="com.wmtc.wmane.jar" >
+    		<!-- 包含要合并的所有jar包 -->
+        	<zipgroupfileset dir= "libs" includes ="wechat-sdk-android-with-mta-1.0.2.jar,open_sdk_r5781_lite.jar,gson-2.7.jar,okhttp-3.4.1.jar,okio-1.9.0.jar"/>
+        	<zipgroupfileset dir= "build/libs" includes ="wmane.jar"/>
+    	</zip>
+	</target >
+</project>
+

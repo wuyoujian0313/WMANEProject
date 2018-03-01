@@ -54,5 +54,6 @@ task makeJar(type: Copy) {
 
 
 makeJar.dependsOn(build)
-//在终端执行生成JAR包
+// 在终端执行生成JAR包
 // gradlew makeJar
+// ant

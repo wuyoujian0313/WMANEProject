@@ -1,5 +1,7 @@
 package com.weimeitc.wmane.ANEFunction;
 
+import android.app.Activity;
+
 import com.adobe.fre.FREContext;
 import com.adobe.fre.FREFunction;
 import com.adobe.fre.FREObject;
@@ -17,7 +19,9 @@ public class WXSDKRegiterFunction implements FREFunction {
         String appId = ANETypeConversion.FREObject2String(freObjects[0]);
         String appSecret = ANETypeConversion.FREObject2String(freObjects[1]);
         String partner = ANETypeConversion.FREObject2String(freObjects[2]);
-        WXPayManager.getSingleton().registetSDK(appId,appSecret,partner);
+
+        Activity activity = freContext.getActivity();
+        WXPayManager.getSingleton().registetSDK(appId,appSecret,partner,activity);
         return null;
     }
 }
