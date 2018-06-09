@@ -14,10 +14,10 @@ import com.tencent.mm.opensdk.modelmsg.SendAuth;
 import com.tencent.mm.opensdk.openapi.IWXAPIEventHandler;
 
 
-import com.weimeitc.wmane.SharedSDK.SharedManager;
-import com.weimeitc.wmane.WMANEShare;
-import com.weimeitc.wmane.WXAccessTokenInfo;
-import com.weimeitc.wmane.WXUserInfo;
+import com.wmtc.wmane.SharedSDK.SharedManager;
+import com.wmtc.wmane.WMANEShare;
+import com.wmtc.wmane.WXAccessTokenInfo;
+import com.wmtc.wmane.WXUserInfo;
 
 import okhttp3.OkHttpClient;
 import okhttp3.Request;

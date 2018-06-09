@@ -1,4 +1,4 @@
-package air.com.weimeitc.bqwx.wxapi;
+package air.com.weimeitc.calligraphy.wxapi;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -12,11 +12,11 @@ import com.tencent.mm.opensdk.modelbase.BaseReq;
 import com.tencent.mm.opensdk.modelbase.BaseResp;
 import com.tencent.mm.opensdk.modelmsg.SendAuth;
 import com.tencent.mm.opensdk.openapi.IWXAPIEventHandler;
-
-import com.wmtc.wmane.WXAccessTokenInfo;
-import com.wmtc.wmane.WXUserInfo;
 import com.wmtc.wmane.SharedSDK.SharedManager;
 import com.wmtc.wmane.WMANEShare;
+import com.wmtc.wmane.WXAccessTokenInfo;
+import com.wmtc.wmane.WXUserInfo;
+
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
