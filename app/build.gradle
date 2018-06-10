@@ -42,6 +42,16 @@ android {
             v1SigningEnabled true
             v2SigningEnabled true
         }
+
+        config_calligraphy {
+            keyAlias 'calligraphy-cer'
+            keyPassword '123456'
+            storeFile file('calligraphy.jks')
+            storePassword '123456'
+
+            v1SigningEnabled true
+            v2SigningEnabled true
+        }
     }
 
     productFlavors {
@@ -62,6 +72,13 @@ android {
             applicationId 'air.com.weimeitc.bqwx'
             signingConfig signingConfigs.config_bqwx
             resValue "string", "app_name", "bqwx"
+        }
+
+        calligraphy {
+            //sign:fed6833ac73d4f62881cf350d8df2ef6
+            applicationId 'air.com.weimeitc.calligraphy'
+            signingConfig signingConfigs.config_calligraphy
+            resValue "string", "app_name", "calligraphy"
         }
     }
 

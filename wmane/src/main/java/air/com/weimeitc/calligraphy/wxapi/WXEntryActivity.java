@@ -49,12 +49,18 @@ public class WXEntryActivity extends Activity implements IWXAPIEventHandler {
         @Override
         public void handleMessage(Message msg) {
 
-            Bundle data = msg.getData();
-            String nickname = data.getString("nickname");
-            String unionId = data.getString("unionId");
-            // UI界面的更新等相关操作
+            final  Message fMsg = msg;
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    Bundle data = fMsg.getData();
+                    String nickname = data.getString("nickname");
+                    String unionId = data.getString("unionId");
+                    // UI界面的更新等相关操作
 
-            WMANEShare.getSingleton().getFreContext().dispatchStatusEventAsync("login_function_",nickname +"###"+unionId);
+                    WMANEShare.getSingleton().getFreContext().dispatchStatusEventAsync("login_function_",nickname +"###"+unionId);
+                }
+            });
         }
     };
 
@@ -66,17 +72,14 @@ public class WXEntryActivity extends Activity implements IWXAPIEventHandler {
             case BaseResp.ErrCode.ERR_OK:
                 if (resp.getType()== ConstantsAPI.COMMAND_SENDAUTH) {
                     final String code = ((SendAuth.Resp) resp).code;
-
                     new Thread(new Runnable() {
                         @Override
                         public void run() {
                             // 在这里进行 http request.网络请求相关操作
                             try {
-
                                 if (code != null) {
                                     String appId = SharedManager.getSingleton().getAppId(SharedManager.E_AIPlatfrom.AIPlatfromWechat);
                                     String appSecret = SharedManager.getSingleton().getAppSecret(SharedManager.E_AIPlatfrom.AIPlatfromWechat);
-
                                     final String url = String.format("https://api.weixin.qq.com/sns/oauth2/access_token?appid=%s&secret=%s&code=%s&grant_type=authorization_code",
                                             appId, appSecret, code);
 

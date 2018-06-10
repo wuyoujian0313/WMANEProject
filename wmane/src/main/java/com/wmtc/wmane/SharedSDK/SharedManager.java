@@ -11,8 +11,6 @@ import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.widget.Toast;
 
-import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
 import com.tencent.connect.share.QQShare;
 import com.tencent.mm.opensdk.modelmsg.*;
 import com.tencent.mm.opensdk.openapi.*;
@@ -23,10 +21,8 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.lang.reflect.Type;
 import java.net.URL;
 import java.util.ArrayList;
-import java.util.LinkedList;
 import java.util.List;
 
 
@@ -86,8 +82,8 @@ public class SharedManager implements ActionSheet.IActionSheetListener {
         for (AISharedPlatformSDKInfo item:this.mSDKInfos) {
             int platform = item.platform;
             if (platform == E_AIPlatfrom.AIPlatfromWechat) {
-                this.wxapi = WXAPIFactory.createWXAPI(this.activity,item.getAppId(),true);
-                this.wxapi.registerApp(item.getAppId());
+                SharedManager.wxapi = WXAPIFactory.createWXAPI(SharedManager.activity,item.getAppId(),true);
+                SharedManager.wxapi.registerApp(item.getAppId());
 
                 this.mScenes.add(new AISharedPlatformScene(platform, E_AIPlatformScene.AIPlatformSceneSession,"分享到微信好友"));
                 this.mScenes.add(new AISharedPlatformScene(platform, E_AIPlatformScene.AIPlatformSceneTimeline,"分享到微信朋友圈"));
@@ -136,7 +132,7 @@ public class SharedManager implements ActionSheet.IActionSheetListener {
         req.scope = "snsapi_userinfo";
         req.state = "weimeitc_aneProject";
 
-        this.wxapi.sendReq(req);
+        SharedManager.wxapi.sendReq(req);
     }
 
     public void loginByQQ() {
