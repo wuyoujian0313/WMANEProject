@@ -163,7 +163,7 @@ public class WXPayManager {
         try{
             PayReq req = new PayReq();
             req.appId = order.getAppid();
-            req.partnerId = order.getPartnerid();;
+            req.partnerId = order.getPartnerid();
             req.prepayId = order.getPrepayid();
             req.packageValue = order.getReturnPackage();
             req.nonceStr = order.getNoncestr();
