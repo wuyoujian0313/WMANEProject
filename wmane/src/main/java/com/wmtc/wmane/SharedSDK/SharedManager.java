@@ -35,8 +35,24 @@ public class SharedManager implements ActionSheet.IActionSheetListener {
     private SharedFinishCallback mCallback;
     private SharedDataModel mData;
 
-    public static IWXAPI wxapi;
-    public static Activity activity;
+    private  IWXAPI wxapi;
+    private  Activity activity;
+
+    public IWXAPI getWxapi() {
+        return wxapi;
+    }
+
+    public void setWxapi(IWXAPI wxapi) {
+        this.wxapi = wxapi;
+    }
+
+    public Activity getActivity() {
+        return activity;
+    }
+
+    public void setActivity(Activity activity) {
+        this.activity = activity;
+    }
 
     // 分享回调函数
     public interface SharedFinishCallback {
@@ -58,7 +74,7 @@ public class SharedManager implements ActionSheet.IActionSheetListener {
 
     public void regiterSharedPlatforms(Activity activity, ArrayList<AISharedPlatformSDKInfo> platforms) {
 
-        SharedManager.activity = activity;
+        this.activity = activity;
         this.mActionSheet = new ActionSheet(activity);
         this.mActionSheet.setHaveCancleBtn(true);
         this.mActionSheet.setCancelable(false);
@@ -82,8 +98,8 @@ public class SharedManager implements ActionSheet.IActionSheetListener {
         for (AISharedPlatformSDKInfo item:this.mSDKInfos) {
             int platform = item.platform;
             if (platform == E_AIPlatfrom.AIPlatfromWechat) {
-                SharedManager.wxapi = WXAPIFactory.createWXAPI(SharedManager.activity,item.getAppId(),true);
-                SharedManager.wxapi.registerApp(item.getAppId());
+                this.wxapi = WXAPIFactory.createWXAPI(this.activity,item.getAppId(),true);
+                this.wxapi.registerApp(item.getAppId());
 
                 this.mScenes.add(new AISharedPlatformScene(platform, E_AIPlatformScene.AIPlatformSceneSession,"分享到微信好友"));
                 this.mScenes.add(new AISharedPlatformScene(platform, E_AIPlatformScene.AIPlatformSceneTimeline,"分享到微信朋友圈"));
@@ -132,7 +148,7 @@ public class SharedManager implements ActionSheet.IActionSheetListener {
         req.scope = "snsapi_userinfo";
         req.state = "weimeitc_aneProject";
 
-        SharedManager.wxapi.sendReq(req);
+        this.wxapi.sendReq(req);
     }
 
     public void loginByQQ() {
@@ -242,7 +258,7 @@ public class SharedManager implements ActionSheet.IActionSheetListener {
             params.putInt(QQShare.SHARE_TO_QQ_KEY_TYPE,QQShare.SHARE_TO_QQ_TYPE_IMAGE);
 
             Bitmap bm = this.mData.image;
-            File file = new File(SharedManager.activity.getExternalCacheDir(),"temp.png");
+            File file = new File(this.activity.getExternalCacheDir(),"temp.png");
             if (file.exists()){
                 file.delete();
             }
