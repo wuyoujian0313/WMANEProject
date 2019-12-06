@@ -23,6 +23,7 @@ public class AppBroadcastFunction implements FREFunction {
     private final static String ACTION_TOUCH_PAD_PRESSED_FOR_GAME_COURSE_MODE ="ACTION_TOUCH_PAD_PRESSED_FOR_GAME_COURSE_MODE";
 
     private FREContext freContext;
+    private ASRBroadcastReceiver asrBroadcastReceiver;
     //继承BroadcastReceiver基类
     public class ASRBroadcastReceiver extends BroadcastReceiver {
         @Override
@@ -50,7 +51,10 @@ public class AppBroadcastFunction implements FREFunction {
     public FREObject call(FREContext freContext, FREObject[] freObjects) {
 
         this.freContext = freContext;
-        ASRBroadcastReceiver asrBroadcastReceiver = new ASRBroadcastReceiver();
+        if (asrBroadcastReceiver !=null) {
+            freContext.getActivity().unregisterReceiver(asrBroadcastReceiver);
+        }
+        asrBroadcastReceiver = new ASRBroadcastReceiver();
         //实例化IntentFilter
         IntentFilter intentFilter = new IntentFilter();
 
@@ -67,7 +71,7 @@ public class AppBroadcastFunction implements FREFunction {
 
         Intent intent = new Intent();
         intent.setAction(action);
-        intent.putExtra("param",value);
+        intent.putExtra("EXTRA_JSON",value);
         freContext.getActivity().sendBroadcast(intent);
         return null;
     }
